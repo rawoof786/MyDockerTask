@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusTicket Express - Book Your Journey</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #2575fc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .booking-form {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            background: #f9f9f9;
+        }
+        
+        .ticket-preview {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            background: white;
+            border-left: 1px solid #eee;
+        }
+        
+        h2 {
+            color: #2575fc;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2575fc;
+            box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.2);
+        }
+        
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        
+        .input-icon input {
+            padding-left: 45px;
+        }
+        
+        .btn {
+            background: #2575fc;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #1c64d6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .ticket {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .ticket-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .ticket-route {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+        
+        .route-from, .route-to {
+            text-align: center;
+        }
+        
+        .route-price {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .route-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .ticket-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .detail-item {
+            margin-bottom: 10px;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 3px;
+        }
+        
+        .detail-value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .ticket-barcode {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.5);
+        }
+        
+        .barcode {
+            font-family: 'Libre Barcode 128', cursive;
+            font-size: 40px;
+            letter-spacing: 5px;
+            margin: 10px 0;
+        }
+        
+        .ticket-number {
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .booking-form, .ticket-preview {
+                border-left: none;
+                border-bottom: 1px solid #eee;
+            }
+        }
+        
+        .success-message {
+            background: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-bus"></i>BusTicket Express
+            </div>
+            <div class="subtitle">Book your journey with ease</div>
+        </header>
+        
+        <div class="content">
+            <div class="booking-form">
+                <h2>Book Your Ticket</h2>
+                
+                <div class="form-group">
+                    <label for="from">From</label>
+                    <div class="input-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <select id="from">
+                            <option value="">Select departure city</option>
+                            <option value="new-york">New York</option>
+                            <option value="boston">Boston</option>
+                            <option value="washington">Washington DC</option>
+                            <option value="philadelphia">Philadelphia</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="to">To</label>
+                    <div class="input-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <select id="to">
+                            <option value="">Select destination city</option>
+                            <option value="new-york">New York</option>
+                            <option value="boston">Boston</option>
+                            <option value="washington">Washington DC</option>
+                            <option value="philadelphia">Philadelphia</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">Departure Date</label>
+                    <div class="input-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="date" id="date">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="passengers">Passengers</label>
+                    <div class="input-icon">
+                        <i class="fas fa-users"></i>
+                        <select id="passengers">
+                            <option value="1">1 Passenger</option>
+                            <option value="2">2 Passengers</option>
+                            <option value="3">3 Passengers</option>
+                            <option value="4">4 Passengers</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="name">Passenger Name</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="name" placeholder="Full name">
+                    </div>
+                </div>
+                
+                <button class="btn" id="book-btn">
+                    <i class="fas fa-ticket-alt"></i> Book Now
+                </button>
+                
+                <div class="success-message" id="success-message">
+                    <i class="fas fa-check-circle"></i> Your ticket has been booked successfully!
+                </div>
+            </div>
+            
+            <div class="ticket-preview">
+                <h2>Your Ticket</h2>
+                
+                <div class="ticket">
+                    <div class="ticket-header">
+                        <div class="logo">
+                            <i class="fas fa-bus"></i>BusTicket Express
+                        </div>
+                        <div class="subtitle">E-Ticket</div>
+                    </div>
+                    
+                    <div class="ticket-route">
+                        <div class="route-from">
+                            <div class="detail-label">FROM</div>
+                            <div class="detail-value" id="ticket-from">--</div>
+                        </div>
+                        
+                        <div class="route-arrow">
+                            <i class="fas fa-long-arrow-alt-right"></i>
+                        </div>
+                        
+                        <div class="route-to">
+                            <div class="detail-label">TO</div>
+                            <div class="detail-value" id="ticket-to">--</div>
+                        </div>
+                    </div>
+                    
+                    <div class="route-price" id="ticket-price">$0.00</div>
+                    
+                    <div class="ticket-details">
+                        <div class="detail-item">
+                            <div class="detail-label">DATE</div>
+                            <div class="detail-value" id="ticket-date">--</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">TIME</div>
+                            <div class="detail-value" id="ticket-time">--</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">PASSENGER</div>
+                            <div class="detail-value" id="ticket-passenger">--</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">SEAT</div>
+                            <div class="detail-value" id="ticket-seat">--</div>
+                        </div>
+                    </div>
+                    
+                    <div class="ticket-barcode">
+                        <div class="ticket-number" id="ticket-number">BT-XXXX-XXXX</div>
+                        <div class="barcode">1234567890</div>
+                        <div class="subtitle">Scan at boarding</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').setAttribute('min', today);
+            
+            // Get elements
+            const fromSelect = document.getElementById('from');
+            const toSelect = document.getElementById('to');
+            const dateInput = document.getElementById('date');
+            const passengersSelect = document.getElementById('passengers');
+            const nameInput = document.getElementById('name');
+            const bookBtn = document.getElementById('book-btn');
+            const successMessage = document.getElementById('success-message');
+            
+            // Ticket elements
+            const ticketFrom = document.getElementById('ticket-from');
+            const ticketTo = document.getElementById('ticket-to');
+            const ticketPrice = document.getElementById('ticket-price');
+            const ticketDate = document.getElementById('ticket-date');
+            const ticketTime = document.getElementById('ticket-time');
+            const ticketPassenger = document.getElementById('ticket-passenger');
+            const ticketSeat = document.getElementById('ticket-seat');
+            const ticketNumber = document.getElementById('ticket-number');
+            
+            // Prices for routes (simplified)
+            const prices = {
+                'new-york-boston': 45,
+                'new-york-washington': 60,
+                'new-york-philadelphia': 35,
+                'boston-new-york': 45,
+                'boston-washington': 75,
+                'boston-philadelphia': 50,
+                'washington-new-york': 60,
+                'washington-boston': 75,
+                'washington-philadelphia': 40,
+                'philadelphia-new-york': 35,
+                'philadelphia-boston': 50,
+                'philadelphia-washington': 40
+            };
+            
+            // Update ticket preview when form changes
+            fromSelect.addEventListener('change', updateTicket);
+            toSelect.addEventListener('change', updateTicket);
+            dateInput.addEventListener('change', updateTicket);
+            passengersSelect.addEventListener('change', updateTicket);
+            nameInput.addEventListener('input', updateTicket);
+            
+            // Book button click event
+            bookBtn.addEventListener('click', function() {
+                // Simple validation
+                if (!fromSelect.value || !toSelect.value || !dateInput.value || !nameInput.value) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                if (fromSelect.value === toSelect.value) {
+                    alert('Departure and destination cannot be the same');
+                    return;
+                }
+                
+                // Generate random seat number
+                const seatRow = String.fromCharCode(65 + Math.floor(Math.random() * 10));
+                const seatNumber = Math.floor(Math.random() * 20) + 1;
+                ticketSeat.textContent = seatRow + seatNumber;
+                
+                // Generate random ticket number
+                const randomNum = Math.floor(1000 + Math.random() * 9000);
+                ticketNumber.textContent = 'BT-' + randomNum + '-' + (new Date().getFullYear() % 100);
+                
+                // Show success message
+                successMessage.style.display = 'block';
+                
+                // Reset form after 3 seconds
+                setTimeout(function() {
+                    fromSelect.value = '';
+                    toSelect.value = '';
+                    dateInput.value = '';
+                    passengersSelect.value = '1';
+                    nameInput.value = '';
+                    successMessage.style.display = 'none';
+                    
+                    // Reset ticket preview
+                    ticketFrom.textContent = '--';
+                    ticketTo.textContent = '--';
+                    ticketPrice.textContent = '$0.00';
+                    ticketDate.textContent = '--';
+                    ticketTime.textContent = '--';
+                    ticketPassenger.textContent = '--';
+                    ticketSeat.textContent = '--';
+                    ticketNumber.textContent = 'BT-XXXX-XXXX';
+                }, 3000);
+            });
+            
+            // Update ticket preview function
+            function updateTicket() {
+                // Update from and to
+                ticketFrom.textContent = fromSelect.options[fromSelect.selectedIndex]?.text || '--';
+                ticketTo.textContent = toSelect.options[toSelect.selectedIndex]?.text || '--';
+                
+                // Update date and time
+                if (dateInput.value) {
+                    const date = new Date(dateInput.value);
+                    ticketDate.textContent = date.toLocaleDateString('en-US', { 
+                        weekday: 'short', 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric' 
+                    });
+                    
+                    // Generate random departure time
+                    const hours = Math.floor(Math.random() * 4) + 7; // Between 7 and 10
+                    const minutes = Math.floor(Math.random() * 60);
+                    ticketTime.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                } else {
+                    ticketDate.textContent = '--';
+                    ticketTime.textContent = '--';
+                }
+                
+                // Update passenger name
+                ticketPassenger.textContent = nameInput.value || '--';
+                
+                // Calculate and update price
+                if (fromSelect.value && toSelect.value) {
+                    const priceKey = `${fromSelect.value}-${toSelect.value}`;
+                    const basePrice = prices[priceKey] || 50;
+                    const passengers = parseInt(passengersSelect.value);
+                    const totalPrice = basePrice * passengers;
+                    
+                    ticketPrice.textContent = `$${totalPrice.toFixed(2)}`;
+                } else {
+                    ticketPrice.textContent = '$0.00';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
